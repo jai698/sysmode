@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.hero-pattern {
+  background-image: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80');
+  background-size: cover;
+  background-position: center;
+  background-blend-mode: overlay;
+}
+
+.feature-pattern {
+  background-image: url('https://images.unsplash.com/photo-1557683316-973673baf926?q=80');
+  background-size: cover;
+  background-position: center;
+  background-blend-mode: soft-light;
+}
+
+.gradient-text {
+  background: linear-gradient(45deg, #3B82F6, #60A5FA);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.glass-card {
+  background: rgba(31, 41, 55, 0.4);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
