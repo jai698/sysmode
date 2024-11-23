@@ -1,385 +1,306 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Link } from 'react-router-dom';
+import JobPostingForm from './JobPostingForm';
+import InternshipPostingForm from './InternshipPostingForm';
+import { useNavigate, useLocation, Routes, Route } from 'react-router-dom';
+import { Layout, Menu, Card, Row, Col, Statistic } from 'antd';
+import {
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
+  DashboardOutlined,
+  FileTextOutlined,
+  MessageOutlined,
+  QuestionCircleOutlined,
+  BarChartOutlined,
+  NotificationOutlined,
+  FileSearchOutlined,
+  HomeOutlined,
+  UserOutlined,
+  FolderOutlined,
+  AppstoreOutlined,
+  TeamOutlined,
+  ScheduleOutlined
+} from '@ant-design/icons';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
-const API_URL = 'http://localhost:3001/api';
+const { Header, Sider, Content } = Layout;
+
+const DashboardOverview = () => {
+  const navigate = useNavigate();
+  
+  return (
+    <div data-aos="fade-up" data-aos-duration="300">
+      <h1 className="text-3xl font-bold text-white mb-8">Welcome to Swissmote Dashboard</h1>
+      <Row gutter={[16, 16]}>
+        <Col xs={24} sm={12} lg={6}>
+          <Card className="bg-blue-500/10 border border-blue-500/20">
+            <Statistic 
+              title={<span className="text-gray-300">Active Jobs</span>}
+              value={42}
+              prefix={<FolderOutlined />}
+              valueStyle={{ color: '#3b82f6' }}
+            />
+          </Card>
+        </Col>
+        <Col xs={24} sm={12} lg={6}>
+          <Card className="bg-green-500/10 border border-green-500/20">
+            <Statistic
+              title={<span className="text-gray-300">Active Listings</span>}
+              value={28}
+              prefix={<AppstoreOutlined />}
+              valueStyle={{ color: '#22c55e' }}
+            />
+          </Card>
+        </Col>
+        <Col xs={24} sm={12} lg={6}>
+          <Card className="bg-purple-500/10 border border-purple-500/20">
+            <Statistic
+              title={<span className="text-gray-300">Assignments</span>}
+              value={15}
+              prefix={<FileTextOutlined />}
+              valueStyle={{ color: '#a855f7' }}
+            />
+          </Card>
+        </Col>
+        <Col xs={24} sm={12} lg={6}>
+          <Card className="bg-orange-500/10 border border-orange-500/20">
+            <Statistic
+              title={<span className="text-gray-300">Candidates</span>}
+              value={156}
+              prefix={<TeamOutlined />}
+              valueStyle={{ color: '#f97316' }}
+            />
+          </Card>
+        </Col>
+      </Row>
+
+      <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <Card className="bg-gray-800/50 border border-gray-700">
+          <h3 className="text-xl font-semibold text-white mb-4">Quick Actions</h3>
+          <div className="grid grid-cols-2 gap-4">
+            <button 
+              onClick={() => navigate('/dashboard/post-job')}
+              className="p-4 bg-blue-500/10 rounded-lg border border-blue-500/20 text-blue-400 hover:bg-blue-500/20 transition-all duration-150"
+            >
+              <FolderOutlined className="text-2xl mb-2" />
+              <div>Post New Job</div>
+            </button>
+            <button 
+              onClick={() => navigate('/dashboard/send-message')}
+              className="p-4 bg-green-500/10 rounded-lg border border-green-500/20 text-green-400 hover:bg-green-500/20 transition-all duration-150"
+            >
+              <MessageOutlined className="text-2xl mb-2" />
+              <div>Send Message</div>
+            </button>
+            <button 
+              onClick={() => navigate('/dashboard/add-assignment')}
+              className="p-4 bg-purple-500/10 rounded-lg border border-purple-500/20 text-purple-400 hover:bg-purple-500/20 transition-all duration-150"
+            >
+              <FileTextOutlined className="text-2xl mb-2" />
+              <div>Add Assignment</div>
+            </button>
+            <button 
+              onClick={() => navigate('/dashboard/active-listings')}
+              className="p-4 bg-orange-500/10 rounded-lg border border-orange-500/20 text-orange-400 hover:bg-orange-500/20 transition-all duration-150"
+            >
+              <BarChartOutlined className="text-2xl mb-2" />
+              <div>View Active Listings</div>
+            </button>
+          </div>
+        </Card>
+
+        <Card className="bg-gray-800/50 border border-gray-700">
+          <h3 className="text-xl font-semibold text-white mb-4">Recent Activity</h3>
+          <div className="space-y-4">
+            <div className="flex items-center text-gray-300 hover:text-white transition-colors duration-150">
+              <FolderOutlined className="mr-3 text-blue-500" />
+              <div>New job posting: Senior Developer</div>
+            </div>
+            <div className="flex items-center text-gray-300 hover:text-white transition-colors duration-150">
+              <MessageOutlined className="mr-3 text-green-500" />
+              <div>Message sent to candidate</div>
+            </div>
+            <div className="flex items-center text-gray-300 hover:text-white transition-colors duration-150">
+              <FileTextOutlined className="mr-3 text-purple-500" />
+              <div>New assignment created</div>
+            </div>
+            <div className="flex items-center text-gray-300 hover:text-white transition-colors duration-150">
+              <TeamOutlined className="mr-3 text-orange-500" />
+              <div>Candidate status updated</div>
+            </div>
+          </div>
+        </Card>
+      </div>
+    </div>
+  );
+};
 
 const Dashboard = () => {
-  // State management
-  const [activeTab, setActiveTab] = useState('jobs');
-  const [jobs, setJobs] = useState([]);
-  const [applications, setApplications] = useState([]);
-  const [messages, setMessages] = useState([]);
-  const [assignments, setAssignments] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [selectedJob, setSelectedJob] = useState(null);
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [newJobData, setNewJobData] = useState({
-    title: '',
-    description: '',
-    requirements: '',
-    salary: '',
-    location: '',
-    type: 'FULLTIME',
-    duration: ''
-  });
+  const [collapsed, setCollapsed] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     AOS.init({
-      duration: 1000,
-      once: true
+      duration: 400,
+      once: true,
+      offset: 30,
+      delay: 0,
+      easing: 'ease-out'
     });
-    fetchJobs();
   }, []);
 
-  const fetchJobs = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.get(`${API_URL}/jobs/activeListing`);
-      setJobs(response.data.data);
-    } catch (error) {
-      console.error('Error fetching jobs:', error);
-    } finally {
-      setLoading(false);
-    }
+  const menuItems = [
+    {
+      key: 'job-management',
+      icon: <FolderOutlined />,
+      label: 'Job Management',
+      children: [
+        { key: '/dashboard/post-job', label: 'Post Full-time Job' },
+        { key: '/dashboard/post-internship', label: 'Post Internship' },
+        { key: '/dashboard/post-unpaid-internship', label: 'Post Unpaid Internship' },
+      ]
+    },
+    {
+      key: 'listings',
+      icon: <AppstoreOutlined />,
+      label: 'Listings',
+      children: [
+        { key: '/dashboard/auto-listings', label: 'Auto Listings' },
+        { key: '/dashboard/automate-listing', label: 'Automate Listing' },
+        { key: '/dashboard/active-listings', label: 'Active Listings' },
+        { key: '/dashboard/closed-listings', label: 'Closed Listings' },
+        { key: '/dashboard/listing-status', label: 'Listing Status' },
+      ]
+    },
+    {
+      key: 'assignments',
+      icon: <FileTextOutlined />,
+      label: 'Assignments & Announcements',
+      children: [
+        { key: '/dashboard/assignments', label: 'Get Assignments' },
+        { key: '/dashboard/add-assignment', label: 'Add Assignment' },
+        { key: '/dashboard/announcement', label: 'Make Announcement' },
+      ]
+    },
+    {
+      key: 'messaging',
+      icon: <MessageOutlined />,
+      label: 'Messaging',
+      children: [
+        { key: '/dashboard/get-messages', label: 'Get Messages' },
+        { key: '/dashboard/send-message', label: 'Send Message' },
+        { key: '/dashboard/get-chat', label: 'Get Chat' },
+      ]
+    },
+    {
+      key: 'candidate',
+      icon: <TeamOutlined />,
+      label: 'Candidate Management',
+      children: [
+        { key: '/dashboard/reply-candidate', label: 'Reply to Candidate' },
+        { key: '/dashboard/reply-candidate-bot', label: 'Reply via Bot' },
+        { key: '/dashboard/hire-candidate', label: 'Hire Candidate' },
+        { key: '/dashboard/candidate-email', label: 'Get Candidate Email' },
+      ]
+    },
+    {
+      key: 'evaluation',
+      icon: <BarChartOutlined />,
+      label: 'Evaluation',
+      children: [
+        { key: '/dashboard/mark-eval', label: 'Mark Evaluation' },
+        { key: '/dashboard/mark-eval-bot', label: 'Mark Bot Evaluation' },
+        { key: '/dashboard/mark-eval-future', label: 'Mark Future Evaluation' },
+      ]
+    },
+    {
+      key: 'reviews',
+      icon: <ScheduleOutlined />,
+      label: 'Reviews & Updates',
+      children: [
+        { key: '/dashboard/add-review', label: 'Add Review' },
+        { key: '/dashboard/daily-updates', label: 'Daily Updates' },
+        { key: '/dashboard/reply-daily', label: 'Reply to Daily Update' },
+      ]
+    },
+    {
+      key: 'questions',
+      icon: <QuestionCircleOutlined />,
+      label: 'Questions',
+      children: [
+        { key: '/dashboard/get-questions', label: 'Get Questions' },
+        { key: '/dashboard/reply-questions', label: 'Reply to Questions' },
+      ]
+    },
+  ];
+
+  const [openKeys, setOpenKeys] = useState([]);
+
+  const onOpenChange = (keys) => {
+    setOpenKeys(keys);
   };
-
-  const createJob = async (e) => {
-    e.preventDefault();
-    try {
-      setLoading(true);
-      const endpoint = newJobData.type === 'FULLTIME' ? 'make_Job' : 'make_Internship';
-      
-      // Create the request body based on job type
-      const requestBody = {
-        title: newJobData.title,
-        description: newJobData.description,
-        requirements: newJobData.requirements,
-        salary: newJobData.salary,
-        location: newJobData.location
-      };
-
-      // Add duration only for internships
-      if (newJobData.type === 'INTERNSHIP') {
-        requestBody.duration = newJobData.duration;
-      }
-
-      await axios.post(`${API_URL}/jobs/${endpoint}`, requestBody);
-      setIsCreateModalOpen(false);
-      fetchJobs();
-    } catch (error) {
-      console.error('Error creating job:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleAutomate = async (listingId) => {
-    try {
-      setLoading(true); // Add loading state
-      const response = await axios.post(`${API_URL}/jobs/automate_Listing`, {
-        listingId, // Match the exact parameter name from controller
-        process: 'standard'
-      });
-  
-      if (response.data.success) {
-        console.log('Job automated successfully');
-        fetchJobs();
-      }
-    } catch (error) {
-      console.error('Error automating job:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleApplicationStatus = async (applicationId, status, notes = '') => {
-    try {
-      let endpoint;
-      switch (status) {
-        case 'EVALUATED':
-          endpoint = 'evaluate';
-          break;
-        case 'FUTURE':
-          endpoint = 'future';
-          break;
-        case 'HIRED':
-          endpoint = 'hire';
-          break;
-        default:
-          return;
-      }
-      
-      await axios.post(`${API_URL}/applications/${endpoint}`, {
-        applicationId,
-        notes
-      });
-      fetchApplications();
-    } catch (error) {
-      console.error('Error updating application:', error);
-    }
-  };
-
-  const fetchApplications = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.get(`${API_URL}/applications`);
-      setApplications(response.data.data);
-    } catch (error) {
-      console.error('Error fetching applications:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const sendMessage = async (applicationId, content, type = 'USER') => {
-    try {
-      await axios.post(`${API_URL}/messages/send`, {
-        applicationId,
-        content,
-        type
-      });
-      fetchMessages(applicationId);
-    } catch (error) {
-      console.error('Error sending message:', error);
-    }
-  };
-
-  const fetchMessages = async (applicationId) => {
-    try {
-      const response = await axios.get(`${API_URL}/messages/${applicationId}`);
-      setMessages(response.data.data);
-    } catch (error) {
-      console.error('Error fetching messages:', error);
-    }
-  };
-
-  const renderJobsList = () => (
-    <div className="bg-white rounded-xl shadow-sm p-6">
-      <div className="overflow-x-auto">
-        <table className="w-full">
-          <thead>
-            <tr className="border-b border-gray-200">
-              <th className="text-left py-4 px-6 text-gray-500">Title</th>
-              <th className="text-left py-4 px-6 text-gray-500">Type</th>
-              <th className="text-left py-4 px-6 text-gray-500">Location</th>
-              <th className="text-left py-4 px-6 text-gray-500">Salary</th>
-              <th className="text-left py-4 px-6 text-gray-500">Status</th>
-              <th className="text-left py-4 px-6 text-gray-500">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {jobs.map((job) => (
-              <tr key={job._id} className="border-b border-gray-100">
-                <td className="py-4 px-6">{job.title}</td>
-                <td className="py-4 px-6">{job.type}</td>
-                <td className="py-4 px-6">{job.location}</td>
-                <td className="py-4 px-6">{job.salary}</td>
-                <td className="py-4 px-6">
-                  <span className={`px-3 py-1 rounded-full text-sm ${
-                    job.status === 'ACTIVE' 
-                      ? 'bg-green-100 text-green-800' 
-                      : 'bg-gray-100 text-gray-800'
-                  }`}>
-                    {job.status}
-                  </span>
-                </td>
-                <td className="py-4 px-6">
-                  <button
-                    onClick={() => handleAutomate(job._id)}
-                    className="text-dark-accent hover:text-dark-accent/80 transition-colors mr-4"
-                  >
-                    Automate
-                  </button>
-                  {/* <button 
-                    onClick={() => setSelectedJob(job)}
-                    className="text-dark-accent hover:text-dark-accent/80 transition-colors"
-                  >
-                    View Details
-                  </button> */}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
-
-  const renderCreateJobModal = () => (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
-      <div className="bg-white rounded-xl p-8 max-w-2xl w-full">
-        <h2 className="text-2xl font-bold mb-6">Create New Job</h2>
-        <form onSubmit={createJob}>
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Job Type</label>
-              <select
-                value={newJobData.type}
-                onChange={(e) => setNewJobData({ ...newJobData, type: e.target.value })}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-dark-accent focus:ring-dark-accent"
-              >
-                <option value="FULLTIME">Full Time</option>
-                <option value="INTERNSHIP">Internship</option>
-              </select>
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Title</label>
-              <input
-                type="text"
-                value={newJobData.title}
-                onChange={(e) => setNewJobData({ ...newJobData, title: e.target.value })}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-dark-accent focus:ring-dark-accent"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Description</label>
-              <textarea
-                value={newJobData.description}
-                onChange={(e) => setNewJobData({ ...newJobData, description: e.target.value })}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-dark-accent focus:ring-dark-accent"
-                rows={4}
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Requirements</label>
-              <textarea
-                value={newJobData.requirements}
-                onChange={(e) => setNewJobData({ ...newJobData, requirements: e.target.value })}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-dark-accent focus:ring-dark-accent"
-                rows={3}
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Salary</label>
-              <input
-                type="text"
-                value={newJobData.salary}
-                onChange={(e) => setNewJobData({ ...newJobData, salary: e.target.value })}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-dark-accent focus:ring-dark-accent"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Location</label>
-              <input
-                type="text"
-                value={newJobData.location}
-                onChange={(e) => setNewJobData({ ...newJobData, location: e.target.value })}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-dark-accent focus:ring-dark-accent"
-                required
-              />
-            </div>
-
-            {newJobData.type === 'INTERNSHIP' && (
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Duration (months)</label>
-                <input
-                  type="number"
-                  value={newJobData.duration}
-                  onChange={(e) => setNewJobData({ ...newJobData, duration: e.target.value })}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-dark-accent focus:ring-dark-accent"
-                  required
-                />
-              </div>
-            )}
-
-            <div className="flex justify-end space-x-4 mt-6">
-              <button
-                type="button"
-                onClick={() => setIsCreateModalOpen(false)}
-                className="px-4 py-2 text-gray-600 hover:text-gray-800"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                className="px-4 py-2 bg-dark-accent text-white rounded-md hover:bg-dark-accent/90"
-              >
-                Create Job
-              </button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      {/* Sidebar */}
-      <aside className="fixed left-0 top-0 h-screen w-64 bg-dark-primary text-white p-4">
-        <div className="text-2xl font-bold gradient-text mb-8">
-          <Link to="/">Sysmode</Link>
-        </div>
-        <nav className="space-y-2">
-          <button 
-            onClick={() => setActiveTab('jobs')}
-            className={`w-full text-left px-4 py-2 rounded-lg transition-colors ${
-              activeTab === 'jobs' ? 'bg-dark-accent' : 'hover:bg-dark-secondary'
-            }`}
-          >
-            Jobs
-          </button>
-          <button 
-            onClick={() => setActiveTab('applications')}
-            className={`w-full text-left px-4 py-2 rounded-lg transition-colors ${
-              activeTab === 'applications' ? 'bg-dark-accent' : 'hover:bg-dark-secondary'
-            }`}
-          >
-            Applications
-          </button>
-          <button 
-            onClick={() => setActiveTab('messages')}
-            className={`w-full text-left px-4 py-2 rounded-lg transition-colors ${
-              activeTab === 'messages' ? 'bg-dark-accent' : 'hover:bg-dark-secondary'
-            }`}
-          >
-            Messages
-          </button>
-        </nav>
-      </aside>
-
-      {/* Main Content */}
-      <main className="ml-64 p-8">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-2xl font-bold text-gray-800">
-            {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}
-          </h1>
-          {activeTab === 'jobs' && (
-            <button
-              onClick={() => setIsCreateModalOpen(true)}
-              className="bg-dark-accent text-white px-4 py-2 rounded-lg hover:bg-dark-accent/90 transition-colors"
-            >
-              + Create New Job
-            </button>
-          )}
-        </div>
-
-        {loading ? (
-          <div className="flex justify-center items-center h-64">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-dark-accent"></div>
+    <Layout style={{ minHeight: '100vh' }}>
+      <Sider 
+        trigger={null} 
+        collapsible 
+        collapsed={collapsed}
+        className="bg-gray-900 border-r border-gray-800"
+        width={260}
+      >
+        <div className="flex items-center justify-between h-16 px-4 border-b border-gray-800">
+          <div className="text-xl font-bold text-blue-500 whitespace-nowrap overflow-hidden">
+            {!collapsed && 'Swissmote'}
           </div>
-        ) : (
-          <>
-            {activeTab === 'jobs' && renderJobsList()}
-            {/* Add other tab content here */}
-          </>
-        )}
-      </main>
-
-      {isCreateModalOpen && renderCreateJobModal()}
-    </div>
+          <button
+            onClick={() => setCollapsed(!collapsed)}
+            className="text-gray-400 hover:text-white transition-colors duration-150"
+          >
+            {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+          </button>
+        </div>
+        <Menu
+          theme="dark"
+          mode="inline"
+          selectedKeys={[location.pathname]}
+          openKeys={openKeys}
+          onOpenChange={onOpenChange}
+          onClick={({ key }) => navigate(key)}
+          items={menuItems}
+          className="bg-gray-900 border-r border-gray-800"
+        />
+      </Sider>
+      <Layout>
+        <Header className="bg-gray-900 border-b border-gray-800 px-4 flex justify-between items-center">
+          <div className="text-xl font-semibold text-white">
+            <DashboardOutlined className="mr-2" />
+            Dashboard
+          </div>
+          <button
+            onClick={() => navigate('/')}
+            className="text-gray-300 hover:text-white px-4 py-2 rounded-md 
+                      flex items-center gap-2 hover:bg-gray-800 transition-colors duration-150"
+          >
+            <HomeOutlined />
+            Home
+          </button>
+        </Header>
+        <Content className="p-6 bg-gray-900">
+          <div 
+            className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6 min-h-[calc(100vh-theme('spacing.32'))]"
+          >
+            <Routes>
+              <Route path="/" element={<DashboardOverview />} />
+              <Route path="/post-job" element={<JobPostingForm />} />
+              <Route path="/post-internship" element={<InternshipPostingForm />} />
+              {/* Add more routes as you create the components */}
+            </Routes>
+          </div>
+        </Content>
+      </Layout>
+    </Layout>
   );
 };
 

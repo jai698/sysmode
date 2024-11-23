@@ -1,6 +1,89 @@
+@import 'antd/dist/reset.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Ant Design dark theme overrides */
+.ant-menu.ant-menu-dark {
+  background: #111827;
+}
+
+.ant-menu-dark .ant-menu-sub {
+  background: #1f2937;
+}
+
+.ant-menu-dark .ant-menu-item-selected {
+  background: #3b82f6;
+}
+
+.ant-menu-dark .ant-menu-item:hover:not(.ant-menu-item-selected) {
+  background: #374151;
+}
+
+.ant-layout-sider-trigger {
+  background: #1f2937;
+}
+
+/* Smooth transitions */
+.ant-layout-sider {
+  transition: all 0.2s !important;
+}
+
+.ant-menu-inline-collapsed {
+  transition: all 0.2s !important;
+}
+
+.ant-menu .ant-menu-item,
+.ant-menu .ant-menu-submenu {
+  transition: all 0.2s !important;
+}
+
+/* Ant Design Dark Theme Overrides */
+.ant-select-dropdown {
+  background-color: #1f2937 !important;
+  border-color: #374151 !important;
+}
+
+.ant-select-item {
+  color: #fff !important;
+}
+
+.ant-select-item-option-selected {
+  background-color: #3b82f6 !important;
+}
+
+.ant-select-item-option-active {
+  background-color: #2563eb !important;
+}
+
+.ant-form-item-explain-error {
+  color: #ef4444 !important;
+}
+
+.ant-input-number-handler-wrap {
+  background-color: #374151 !important;
+}
+
+.ant-input-number-handler:hover {
+  background-color: #4b5563 !important;
+}
+
+.ant-message-custom-content {
+  display: flex;
+  align-items: center;
+}
+
+.ant-btn {
+  text-align: center;
+  line-height: 1.2;
+  height: auto;
+  min-height: 32px;
+}
+
+.ant-card-head-title {
+  font-size: 18px;
+  font-weight: bold;
+}
 
 .hero-pattern {
   background-image: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80');
@@ -27,4 +110,374 @@
   background: rgba(31, 41, 55, 0.4);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Base Input Styles */
+.ant-input,
+.ant-input-number,
+.ant-select.custom-select .ant-select-selector {
+  background-color: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 8px !important;
+  height: 48px !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+  font-weight: 500 !important;
+  color: #1e293b !important;
+  font-size: 0.95rem !important;
+}
+
+/* Input Values */
+.ant-input,
+.ant-input-number-input,
+.ant-select-selection-item,
+.ant-select-selection-item-content {
+  font-weight: 500 !important;
+  color: #1e293b !important;
+}
+
+/* Placeholder Colors */
+.ant-input::placeholder,
+.ant-input-number-input::placeholder,
+.ant-select-selection-placeholder {
+  color: #94a3b8 !important;
+  font-weight: 400 !important;
+}
+
+/* Select Dropdown Text */
+.ant-select-item {
+  font-weight: 500 !important;
+  color: #1e293b !important;
+}
+
+/* Hover States */
+.ant-input:hover,
+.ant-input-number:hover,
+.ant-select.custom-select:hover .ant-select-selector {
+  background-color: #ffffff !important;
+  border-color: #94a3b8 !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Focus States */
+.ant-input:focus,
+.ant-input-number-focused,
+.ant-select.custom-select.ant-select-focused .ant-select-selector {
+  background-color: #ffffff !important;
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1) !important;
+}
+
+/* Select Dropdown Styles */
+.ant-select-dropdown {
+  background-color: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 
+              0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+  padding: 4px !important;
+}
+
+.ant-select-item {
+  padding: 8px 12px !important;
+  border-radius: 6px !important;
+  margin: 2px 4px !important;
+}
+
+.ant-select-item-option-active {
+  background-color: #f1f5f9 !important;
+}
+
+.ant-select-item-option-selected {
+  background-color: #eff6ff !important;
+  color: #2563eb !important;
+  font-weight: 600 !important;
+}
+
+/* Input Number Specific Styles */
+.ant-input-number {
+  width: 100% !important;
+}
+
+.ant-input-number-input {
+  height: 46px !important;
+  padding: 0 12px !important;
+}
+
+.ant-input-number-handler-wrap {
+  background-color: #f8fafc !important;
+  border-left: 1px solid #e2e8f0 !important;
+  border-radius: 0 8px 8px 0 !important;
+}
+
+.ant-input-number-handler:hover {
+  background-color: #f1f5f9 !important;
+}
+
+/* Select Tags Style */
+.ant-select-selection-item {
+  background-color: #f1f5f9 !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 6px !important;
+  margin: 2px !important;
+  height: 28px !important;
+  line-height: 26px !important;
+}
+
+.ant-select-selection-search {
+  margin-left: 8px !important;
+}
+
+/* Error States */
+.ant-form-item-has-error .ant-input,
+.ant-form-item-has-error .ant-input-number,
+.ant-form-item-has-error .ant-select.custom-select .ant-select-selector {
+  background-color: #fff1f2 !important;
+  border-color: #fb7185 !important;
+}
+
+.ant-form-item-explain-error {
+  color: #e11d48 !important;
+  font-size: 0.875rem !important;
+  margin-top: 4px !important;
+  font-weight: 500 !important;
+}
+
+/* Message Notifications */
+.custom-message {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+              0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+  padding: 12px 16px !important;
+  font-weight: 500 !important;
+}
+
+/* Message (Toast) Styles */
+.ant-message {
+  top: 20px !important;
+}
+
+.ant-message .ant-message-notice-content {
+  display: inline-block !important;
+  padding: 10px 16px !important;
+  border-radius: 8px !important;
+}
+
+.ant-message-custom-content {
+  display: flex !important;
+  align-items: center !important;
+  font-size: 14px !important;
+  color: #f3f4f6 !important;
+}
+
+.ant-message .anticon {
+  font-size: 16px !important;
+  margin-right: 8px !important;
+}
+
+/* Success message icon color */
+.ant-message-success .anticon {
+  color: #10b981 !important;
+}
+
+/* Error message icon color */
+.ant-message-error .anticon {
+  color: #ef4444 !important;
+}
+
+/* Switch Component Styles */
+.ant-switch {
+  background-color: #4b5563 !important;
+}
+
+.ant-switch-checked {
+  background-color: #3b82f6 !important;
+}
+
+.ant-switch:hover:not(.ant-switch-disabled) {
+  background-color: #6b7280 !important;
+}
+
+.ant-switch-checked:hover:not(.ant-switch-disabled) {
+  background-color: #2563eb !important;
+}
+
+/* Table Styles */
+.custom-table .ant-table {
+  background: #1f2937 !important;
+  color: #e5e7eb !important;
+}
+
+.custom-table .ant-table-thead > tr > th {
+  background: #111827 !important;
+  color: #e5e7eb !important;
+  border-bottom: 1px solid #374151 !important;
+}
+
+.custom-table .ant-table-tbody > tr > td {
+  border-bottom: 1px solid #374151 !important;
+  color: #e5e7eb !important;
+}
+
+.custom-table .ant-table-tbody > tr:hover > td {
+  background: #374151 !important;
+}
+
+.custom-table .ant-pagination-item {
+  background: #1f2937 !important;
+  border-color: #374151 !important;
+}
+
+.custom-table .ant-pagination-item-active {
+  border-color: #3b82f6 !important;
+}
+
+.custom-table .ant-pagination-item a {
+  color: #e5e7eb !important;
+}
+
+.custom-table .ant-select-selector {
+  background: #1f2937 !important;
+  border-color: #374151 !important;
+  color: #e5e7eb !important;
+}
+
+/* Tag Colors */
+.ant-tag-blue {
+  background: rgba(59, 130, 246, 0.1) !important;
+  border-color: rgba(59, 130, 246, 0.2) !important;
+  color: #60a5fa !important;
+}
+
+.ant-tag-green {
+  background: rgba(16, 185, 129, 0.1) !important;
+  border-color: rgba(16, 185, 129, 0.2) !important;
+  color: #34d399 !important;
+}
+
+.ant-tag-purple {
+  background: rgba(139, 92, 246, 0.1) !important;
+  border-color: rgba(139, 92, 246, 0.2) !important;
+  color: #a78bfa !important;
+}
+
+.custom-select-small .ant-select-selector {
+  background-color: white !important;
+  border-color: #d1d5db !important;
+  height: 28px !important;
+  border-radius: 6px !important;
+}
+
+.custom-select-small .ant-select-selection-item {
+  line-height: 26px !important;
+}
+
+.custom-select-small .ant-select-selector:hover {
+  border-color: #3b82f6 !important;
+}
+
+.custom-select-small .ant-select-selector:focus {
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2) !important;
+}
+
+/* Adjust form item spacing */
+.ant-form-item {
+  margin-bottom: 24px !important;
+}
+
+/* Adjust label spacing */
+.ant-form-item-label {
+  padding-bottom: 8px !important;
+}
+
+.ant-form-item-label > label {
+  height: auto !important;
+}
+
+/* Add to your global CSS file */
+.ant-select-selector {
+  height: 32px !important;
+  background-color: rgb(249 250 251) !important;
+  border: 1px solid rgb(209 213 219) !important;
+  border-radius: 0.5rem !important;
+  padding: 0 11px !important;
+}
+
+.ant-select-selection-item {
+  line-height: 30px !important;
+}
+
+.ant-select:not(.ant-select-disabled):hover .ant-select-selector {
+  border-color: rgb(59 130 246) !important;
+}
+
+.ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector {
+  border-color: rgb(59 130 246) !important;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2) !important;
+}
+
+/* Switch styling */
+.ant-switch {
+  background-color: rgba(156, 163, 175, 1) !important;
+}
+
+.ant-switch-checked {
+  background-color: rgb(59 130 246) !important;
+}
+
+/* Add to your global CSS file */
+.ant-input-affix-wrapper {
+  padding: 12px !important;
+  border-radius: 12px !important;
+  height: 45px !important;
+  background: white !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.ant-input {
+  background: white !important;
+  font-size: 14px !important;
+}
+
+.ant-select:not(.ant-select-customize-input) .ant-select-selector {
+  padding: 12px !important;
+  border-radius: 12px !important;
+  height: 45px !important;
+  background: white !important;
+  border: none !important;
+  box-shadow: none !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.ant-select-selection-item {
+  line-height: normal !important;
+  font-size: 14px !important;
+}
+
+.ant-select-selection-placeholder {
+  line-height: normal !important;
+  font-size: 14px !important;
+}
+
+.ant-form-item {
+  margin-bottom: 16px !important;
+}
+
+.ant-form-item-label > label {
+  font-size: 14px !important;
+  height: 24px !important;
+}
+
+/* For the switch */
+.ant-switch {
+  background: rgba(217, 217, 217, 0.2) !important;
+}
+
+.ant-switch-checked {
+  background: #4B8BF4 !important;
 }
