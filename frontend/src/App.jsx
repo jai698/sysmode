@@ -27,8 +27,7 @@ import GetQuestions from './components/GetQuestions';
 import ReplyQuestion from './components/ReplyQuestion';
 import HireCandidate from './components/HireCandidate';
 import GetChat from './components/GetChat';
-import SendMessage from './components/SendMessage';
-import SignUp from './components/SignUp';
+import SignUp from './components/Signup';
 import Login from './components/Login';
 
 // Import other components as needed
